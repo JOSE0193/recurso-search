@@ -161,7 +161,7 @@ public class RecursoItemServiceImpl implements RecursoItemService {
                 .orElse(recursoItem.getId().getNumeroRecurso());
 
         // CASO A MULTA ESTEJA NO CASO ESPECIAL DE ALTERAÇÃO DE NP PARA NA (REFERENTE AO PROBLEMA DOS CORREIOS)
-        if (!multa.getSituacaoCorreio().equalsIgnoreCase("V")) {
+        if (!multa.getSituacaoCorreio().equals("V")) {
 
             // VERIFICA A QTD DE RECURSOS DE DEFESA QUE O AUTO ESTÁ CADASTRADO, SE FOR ENCONTRADO EM MAIS DE UM PROCESSO, NAO CADASTRAR NA TABELA DE TR416 PENDENTE
             RecursoItemCriteria criteria = RecursoItemCriteria.builder()

@@ -164,7 +164,7 @@ public class RecursoServiceImpl implements RecursoService {
     @Override
     public List<DadosProcessoView> consultarProcesso(String numeroProcesso, String placa, String numeroAuto, String situacao,
                                                      String relator, String dataInicio, String dataFim, String nomeRequerente,
-                                                     String orgaoInterno, String tipoRecurso, String orgaoProcesso, String orgaoAnalizador) {
+                                                     String orgaoInterno, String tipoRecurso, String orgaoProcesso, String orgaoAnalisador) {
         String placaConvertida = veiculoService.conversorPlacaMercosul(placa);
         DadosProcessoCriteria criteria = DadosProcessoCriteria.builder()
                 .numeroProcesso(StringFilter.buildEquals(numeroProcesso))
@@ -177,7 +177,7 @@ public class RecursoServiceImpl implements RecursoService {
                 .dataFim(StringFilter.buildEquals(dataFim))
                 .orgaoProcesso(StringFilter.buildEquals(orgaoProcesso))
                 .orgaoInterno(StringFilter.buildEquals(orgaoInterno))
-                .orgaoAnalizador(StringFilter.buildEquals(orgaoAnalizador))
+                .orgaoAnalizador(StringFilter.buildEquals(orgaoAnalisador))
                 .nomeRequerente(StringFilter.buildEquals(nomeRequerente))
                 .build();
         return dadosProcessoRepository.findAll(buildSpecification(criteria));
