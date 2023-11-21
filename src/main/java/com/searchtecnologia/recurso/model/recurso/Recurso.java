@@ -136,4 +136,5 @@ public class Recurso implements Serializable {
     @ManyToOne
     @JoinColumn(name = "MM_OAU_CODIGO_ANALISADOR", referencedColumnName = "MM_OAU_CODIGO")
     private OrgaoAutuador orgaoAnalisador;
+
 }

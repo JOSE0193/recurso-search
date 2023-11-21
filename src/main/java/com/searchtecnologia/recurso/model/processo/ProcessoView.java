@@ -3,11 +3,16 @@ package com.searchtecnologia.recurso.model.processo;
 import com.searchtecnologia.recurso.model.orgaoautuador.OrgaoAutuador;
 import com.searchtecnologia.recurso.model.recurso.RecursoView;
 import com.searchtecnologia.recurso.model.resultado.Resultado;
+import com.searchtecnologia.recurso.util.persistence.type.LocalDateType;
+import com.searchtecnologia.recurso.util.persistence.type.LocalTimeType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +21,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Entity
-@Table(schema = "MULTAWEB", name = "MMA1PROC")
+@Table(name = "MMA1PROC", schema = "MULTAWEB")
 public class ProcessoView implements Serializable {
 
     @Id
@@ -83,10 +88,12 @@ public class ProcessoView implements Serializable {
     private String logFuncaoCadastro;
 
     @Column(name = "MU_PROC_LOG_DATA_RESULTAD1")
-    private String logDataResultado1;
+    @Type(LocalDateType.class)
+    private LocalDate logDataResultado1;
 
     @Column(name = "MU_PROC_LOG_HORA_RESULTAD1")
-    private String logHoraResultado1;
+    @Type(LocalTimeType.class)
+    private LocalTime logHoraResultado1;
 
     @Column(name = "MU_PROC_LOG_OPERADOR_RESULTAD1")
     private String logOperadorResultado1;
@@ -98,10 +105,12 @@ public class ProcessoView implements Serializable {
     private String logFuncaoResultado1;
 
     @Column(name = "MU_PROC_LOG_DATA_RESULTAD2")
-    private String logDataResultado2;
+    @Type(LocalDateType.class)
+    private LocalDate logDataResultado2;
 
     @Column(name = "MU_PROC_LOG_HORA_RESULTAD2")
-    private String logHoraResultado2;
+    @Type(LocalTimeType.class)
+    private LocalTime logHoraResultado2;
 
     @Column(name = "MU_PROC_LOG_OPERADOR_RESULTAD2")
     private String logOperadorResultado2;
@@ -194,15 +203,7 @@ public class ProcessoView implements Serializable {
     private String codigoOrgaoAnalisador;
 
     @ManyToOne
-    @JoinColumn(name = "MU_IDPR_CODIGO", referencedColumnName = "MU_IDPR_NUMERO", insertable = false, updatable = false)
-    private RecursoView recursoView;
-
-    @ManyToOne
-    @JoinColumn(name = "MM_OAU_CODIGO_ANALISADOR", referencedColumnName = "MM_OAU_CODIGO", insertable = false, updatable = false)
-    private OrgaoAutuador orgaoAnalisador;
-
-    @ManyToOne
-    @JoinColumn(name = "MU_PROC_SITUACAO1", referencedColumnName = "MM_REJ_CODIGO", insertable = false, updatable = false)
-    private Resultado resultado;
+    @JoinColumn(name = "MU_IDPR_CODIGO", referencedColumnName = "NUMERO_PROCESSO", insertable = false, updatable = false)
+    private DadosProcessoView dadosProcesso;
 
 }

@@ -13,12 +13,7 @@ public interface RecursoService {
      */
     RecursoDTO cadastrarRecurso(CadastrarRecursoDTO cadastrarRecursoDTO);
 
-    String verificarAutoPossuiRecurso(String numeroAuto, String orgaoAutuador, String sequencial, String tipoRecurso);
-
-    String validaConcluirSolicitacao(String numeroProcesso, String orgaoAnalizador, String indeferido);
-
-    List<DadosProcessoView> consultarProcesso(String numeroProcesso, String placa, String numeroAuto, String situacao,
-                                              String relator, String dataInicio, String dataFim, String nomeRequerente,
-                                              String orgaoInterno, String tipoRecurso, String orgaoProcesso, String orgaoAnalizador);
+//    String verificarAutoPossuiRecurso(String numeroAuto, String orgaoAutuador, String sequencial, String tipoRecurso);
+//
 
 }

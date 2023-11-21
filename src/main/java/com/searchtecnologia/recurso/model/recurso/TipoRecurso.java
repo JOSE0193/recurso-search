@@ -16,7 +16,7 @@ public enum TipoRecurso {
     DEFESA_PREVIA("D", "Defesa prévia"),
     RECURSO_JARI("J", "Recurso jari"),
     RECURSO_CETRAN("S", "Recurso cetran"),
-    SOLICITACAO_ADVERTENCIA("A", "Solicitação de advertência");
+    ADVERTENCIA("A", "Solicitação de advertência");
 
     private String valor;
     private String descricao;

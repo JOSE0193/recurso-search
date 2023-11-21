@@ -1,11 +1,20 @@
 package com.searchtecnologia.recurso.model.processo;
 
+import com.searchtecnologia.recurso.model.recurso.TipoRecurso;
 import com.searchtecnologia.recurso.model.resultado.Resultado;
 import com.searchtecnologia.recurso.model.uf.UF;
+import com.searchtecnologia.recurso.util.persistence.type.LocalDateBrType;
+import com.searchtecnologia.recurso.util.persistence.type.LocalDateType;
+import com.searchtecnologia.recurso.util.persistence.type.LocalTimeType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,7 +23,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Entity
-@Table(schema = "MULTAWEB", name = "V_SGM_DADOS_PROCESSO")
+@Table(name = "V_SGM_DADOS_PROCESSO", schema = "MULTAWEB")
 public class DadosProcessoView implements Serializable {
 
     @Id
@@ -34,72 +43,76 @@ public class DadosProcessoView implements Serializable {
     private String codOrgaoProcesso;
 
     @Column(name = "DESC_ORGAO_PROCESSO")
-    private String decricaoOrgaoProcesso;
+    private String descOrgaoProcesso;
 
     @Column(name = "COD_ORGAO_ANALIZADOR")
     private String codOrgaoAnalizador;
+
     @Column(name = "NOME_REQUERENTE")
     private String nomeRequerente;
+
+    @Column(name = "TIPO_REQUERENTE")
+    private String tipoRequerente;
 
     @Column(name = "COD_MUNICIPIO")
     private String codMunicipio;
 
     @Column(name = "NOME_MUNICICPIO")
-    private String municipio;
+    private String nomeMunicipio;
 
     @Column(name = "UF_MUNICICPIO")
-    private UF ufMunicipio;
+    private String ufMunicipio;
 
     @Column(name = "DESC_ORGAO_ANALIZADOR")
-    private String decricaoOrgaoAnalizador;
+    private String descOrgaoAnalizador;
 
     @Column(name = "ENDERECO_REQUERENTE")
-    private String endereco;
+    private String enderecoRequerente;
 
     @Column(name = "COMPLEMENTO_ENDERECO")
-    private String complemento;
+    private String complementoEndereco;
 
     @Column(name = "NUMERO_ENDERECO")
     private String numeroEndereco;
 
     @Column(name = "BAIRRO_REQUERENTE")
-    private String bairro;
+    private String bairroRequerente;
 
     @Column(name = "CIDADE_REQUERENTE")
-    private String cidade;
+    private String cidadeRequerente;
 
     @Column(name = "UF_REQUERENTE")
-    private UF ufRequerente;
+    private String ufRequerente;
 
     @Column(name = "CEP_REQUERENTE")
     private String cepRequerente;
 
     @Column(name = "NUMERO_AR")
-    private String numeroAR;
+    private String numeroAr;
 
     @Column(name = "COD_SITUACAO_PROCESSO")
     private String codSituacaoProcesso;
 
     @Column(name = "DESC_SITUACAO_PROCESSO")
-    private String descricaoSituacaoProcesso;
+    private String descSituacaoProcesso;
 
     @Column(name = "COD_JARI")
     private String codJari;
 
     @Column(name = "DESC_JARI")
-    private String descricaoJari;
+    private String descJari;
 
     @Column(name = "COD_RELATOR")
     private String codRelator;
 
     @Column(name = "DESC_RELATOR")
-    private String descricaoRelator;
+    private String descRelator;
 
     @Column(name = "COD_RESULTADO")
     private String codResultado;
 
     @Column(name = "DESC_RESULTADO")
-    private String descricaoResultado;
+    private String descResultado;
 
     @Column(name = "TIPO_RESULTADO")
     private String tipoResultado;
@@ -108,28 +121,34 @@ public class DadosProcessoView implements Serializable {
     private String codStatusProcesso;
 
     @Column(name = "DESC_STATUS_PROCESSO")
-    private String descricaoStatusProcesso;
+    private String descStatusProcesso;
 
     @Column(name = "DATA_PROTOCOLO")
-    private String dataProtocolo;
+    @Type(LocalDateBrType.class)
+    private LocalDate dataProtocolo;
 
     @Column(name = "DATA_CADASTRAMENTO")
-    private String dataCadastramento;
+    @Type(LocalDateBrType.class)
+    private LocalDate dataCadastramento;
 
     @Column(name = "DATA_CADASTRAMENTO_DB")
-    private String dataCadastramentoDB;
+    @Type(LocalDateType.class)
+    private LocalDate dataCadastramentoDb;
 
     @Column(name = "HORA_CADASTRAMENTO")
-    private String horaCadastramento;
+    @Type(LocalTimeType.class)
+    private LocalTime horaCadastramento;
 
     @Column(name = "DATA_CONCLUSAO")
-    private String dataConclusao;
+    @Type(LocalDateBrType.class)
+    private LocalDate dataConclusao;
 
     @Column(name = "TIPO_RECURSO")
-    private String tipoRecurso;
+    @Convert(converter = TipoRecurso.TipoRecursoConverter.class)
+    private TipoRecurso tipoRecurso;
 
     @Column(name = "DESC_TIPO_RECURSO")
-    private String descricaoTipoRecurso;
+    private String descTipoRecurso;
 
     @Column(name = "COD_OPERADOR")
     private String codOperador;
@@ -144,14 +163,17 @@ public class DadosProcessoView implements Serializable {
     private String codOrgaoInternoAnalizador;
 
     @Column(name = "DATA_CIENCIA")
-    private String dataCiencia;
+    @Type(LocalDateType.class)
+    private LocalDate dataCiencia;
 
     @Column(name = "NUM_REQUERIMENTO_SITE")
-    private String numeroRequerimentoSite;
+    private String numRequerimentoSite;
 
-    @ManyToOne
-    @JoinColumn(name = "NUMERO_PROCESSO", referencedColumnName = "MU_IDPR_CODIGO", insertable = false, updatable = false)
-    private ProcessoView processoView;
+    @Column(name = "RECURSO_JULGADO_NO_SGPAM")
+    private String recursoJulgadoNoSgpam;
+
+    @OneToMany(mappedBy = "dadosProcesso")
+    private List<ProcessoView> processos;
 
 }
 

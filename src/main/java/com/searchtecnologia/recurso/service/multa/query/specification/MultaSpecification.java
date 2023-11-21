@@ -37,7 +37,6 @@ public class MultaSpecification {
                                 .get(OrgaoAutuador_.codigo)));
             }
         }
-
         return specification;
     }
 

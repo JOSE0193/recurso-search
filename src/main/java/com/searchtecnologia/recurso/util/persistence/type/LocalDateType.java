@@ -11,7 +11,9 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Objects;
+import java.util.Optional;
 
 public class LocalDateType implements UserType<LocalDate> {
 
@@ -41,8 +43,12 @@ public class LocalDateType implements UserType<LocalDate> {
     @Override
     public LocalDate nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor sharedSessionContractImplementor, Object owner) throws SQLException {
         String columnValue = rs.getString(position);
-        if (StringUtils.isBlank(columnValue)) columnValue = null;
-        return LocalDate.parse(columnValue, FORMATTER);
+        if (StringUtils.isBlank(columnValue)) return null;
+        try {
+            return LocalDate.parse(columnValue, FORMATTER);
+        } catch (DateTimeParseException ex) {
+            return null;
+        }
     }
 
     @Override
@@ -56,7 +62,7 @@ public class LocalDateType implements UserType<LocalDate> {
 
     @Override
     public LocalDate deepCopy(LocalDate value) {
-        return LocalDate.from(value);
+        return Optional.ofNullable(value).map(LocalDate::from).orElse(null);
     }
 
     @Override

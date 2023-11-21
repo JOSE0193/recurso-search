@@ -171,8 +171,8 @@ public class Processo implements Serializable {
     private String dataLiquidacao;
 
     @ManyToOne
-    @JoinColumn(name = "MM_OAU_CODIGO", referencedColumnName = "MM_OAU_CODIGO", insertable = false, updatable = false)
-    private OrgaoAutuador orgaoAutuador;
+    @JoinColumn(name = "MU_PROC_SITUACAO1", referencedColumnName = "MM_REJ_CODIGO", insertable = false, updatable = false)
+    private Resultado resultado;
 
 }
 

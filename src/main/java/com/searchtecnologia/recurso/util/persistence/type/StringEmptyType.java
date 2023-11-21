@@ -65,4 +65,5 @@ public class StringEmptyType implements UserType<String> {
     public String assemble(Serializable cached, Object owner) {
         return deepCopy((String) cached);
     }
+
 }

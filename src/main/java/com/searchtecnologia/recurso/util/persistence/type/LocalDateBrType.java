@@ -9,16 +9,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import java.util.Optional;
 
-public class LocalTimeType implements UserType<LocalTime> {
+public class LocalDateBrType implements UserType<LocalDate> {
 
-    public static final LocalTimeType INSTANCE = new LocalTimeType();
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HHmmss");
+    public static final LocalDateType INSTANCE = new LocalDateType();
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Override
     public int getSqlType() {
@@ -26,33 +26,33 @@ public class LocalTimeType implements UserType<LocalTime> {
     }
 
     @Override
-    public Class<LocalTime> returnedClass() {
-        return LocalTime.class;
+    public Class<LocalDate> returnedClass() {
+        return LocalDate.class;
     }
 
     @Override
-    public boolean equals(LocalTime value1, LocalTime value2) {
+    public boolean equals(LocalDate value1, LocalDate value2) {
         return Objects.equals(value1, value2);
     }
 
     @Override
-    public int hashCode(LocalTime value) {
+    public int hashCode(LocalDate value) {
         return Objects.hashCode(value);
     }
 
     @Override
-    public LocalTime nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor sharedSessionContractImplementor, Object owner) throws SQLException {
+    public LocalDate nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor sharedSessionContractImplementor, Object owner) throws SQLException {
         String columnValue = rs.getString(position);
         if (StringUtils.isBlank(columnValue)) return null;
         try {
-            return LocalTime.parse(columnValue, FORMATTER);
+            return LocalDate.parse(columnValue, FORMATTER);
         } catch (DateTimeParseException ex) {
             return null;
         }
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement ps, LocalTime value, int index, SharedSessionContractImplementor sharedSessionContractImplementor) throws SQLException {
+    public void nullSafeSet(PreparedStatement ps, LocalDate value, int index, SharedSessionContractImplementor sharedSessionContractImplementor) throws SQLException {
         if (Objects.isNull(value)) {
             ps.setNull(index, Types.VARCHAR);
         } else {
@@ -61,8 +61,8 @@ public class LocalTimeType implements UserType<LocalTime> {
     }
 
     @Override
-    public LocalTime deepCopy(LocalTime value) {
-        return Optional.ofNullable(value).map(LocalTime::from).orElse(null);
+    public LocalDate deepCopy(LocalDate value) {
+        return Optional.ofNullable(value).map(LocalDate::from).orElse(null);
     }
 
     @Override
@@ -71,13 +71,12 @@ public class LocalTimeType implements UserType<LocalTime> {
     }
 
     @Override
-    public Serializable disassemble(LocalTime value) {
+    public Serializable disassemble(LocalDate value) {
         return deepCopy(value);
     }
 
     @Override
-    public LocalTime assemble(Serializable cached, Object owner) {
-        return deepCopy((LocalTime) cached);
+    public LocalDate assemble(Serializable cached, Object owner) {
+        return deepCopy((LocalDate) cached);
     }
-
 }

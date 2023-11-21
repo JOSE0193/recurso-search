@@ -2,6 +2,7 @@ package com.searchtecnologia.recurso.model.resultado;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.searchtecnologia.recurso.model.orgaoautuador.OrgaoAutuador;
+import com.searchtecnologia.recurso.model.processo.Processo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -53,5 +54,8 @@ public class Resultado implements Serializable {
 
     @OneToMany(mappedBy = "resultado",  cascade = CascadeType.ALL)
     private List<MotivoResultado> motivosResultado;
+
+    @OneToMany(mappedBy = "resultado",  cascade = CascadeType.ALL)
+    private List<Processo> processos;
 
 }

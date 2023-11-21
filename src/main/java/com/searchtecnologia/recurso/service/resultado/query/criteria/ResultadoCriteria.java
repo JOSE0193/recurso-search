@@ -1,8 +1,5 @@
 package com.searchtecnologia.recurso.service.resultado.query.criteria;
 
-import com.searchtecnologia.recurso.service.resultado.query.filter.AtivoFilter;
-import com.searchtecnologia.recurso.service.resultado.query.filter.TipoJulgamentoFilter;
-import com.searchtecnologia.recurso.service.resultado.query.filter.TipoRecursoResultadoFilter;
 import com.searchtecnologia.recurso.service.util.query.filter.StringFilter;
 import lombok.*;
 

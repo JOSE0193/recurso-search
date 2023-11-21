@@ -11,7 +11,9 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Objects;
+import java.util.Optional;
 
 public class LocalTimeEmptyType implements UserType<LocalTime> {
 
@@ -41,8 +43,12 @@ public class LocalTimeEmptyType implements UserType<LocalTime> {
     @Override
     public LocalTime nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor sharedSessionContractImplementor, Object owner) throws SQLException {
         String columnValue = rs.getString(position);
-        if (StringUtils.isBlank(columnValue)) columnValue = null;
-        return LocalTime.parse(columnValue, FORMATTER);
+        if (StringUtils.isBlank(columnValue)) return null;
+        try {
+            return LocalTime.parse(columnValue, FORMATTER);
+        } catch (DateTimeParseException ex) {
+            return null;
+        }
     }
 
     @Override
@@ -52,7 +58,7 @@ public class LocalTimeEmptyType implements UserType<LocalTime> {
 
     @Override
     public LocalTime deepCopy(LocalTime value) {
-        return LocalTime.from(value);
+        return Optional.ofNullable(value).map(LocalTime::from).orElse(null);
     }
 
     @Override
@@ -69,4 +75,5 @@ public class LocalTimeEmptyType implements UserType<LocalTime> {
     public LocalTime assemble(Serializable cached, Object owner) {
         return deepCopy((LocalTime) cached);
     }
+
 }
