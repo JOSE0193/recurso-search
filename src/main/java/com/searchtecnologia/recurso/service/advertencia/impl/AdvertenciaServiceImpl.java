@@ -1,16 +1,17 @@
 package com.searchtecnologia.recurso.service.advertencia.impl;
 
-import com.searchtecnologia.recurso.model.processo.Processo;
-import com.searchtecnologia.recurso.model.recurso.Recurso;
 import com.searchtecnologia.recurso.model.recurso.RecursoView;
 import com.searchtecnologia.recurso.model.recurso.StatusRecurso;
 import com.searchtecnologia.recurso.model.recurso.TipoRecurso;
 import com.searchtecnologia.recurso.model.resultado.TipoJulgamentoResultado;
 import com.searchtecnologia.recurso.model.resultado.TipoRecursoResultado;
+import com.searchtecnologia.recurso.repository.advertencia.AutoAutorizacaoRepository;
 import com.searchtecnologia.recurso.repository.processo.ProcessoRepository;
-import com.searchtecnologia.recurso.repository.recurso.RecursoRepository;
 import com.searchtecnologia.recurso.repository.recurso.RecursoViewRepository;
 import com.searchtecnologia.recurso.service.advertencia.AdvertenciaService;
+import com.searchtecnologia.recurso.service.advertencia.dto.AdvertenciaDTO;
+import com.searchtecnologia.recurso.service.advertencia.mapper.AutoAutorizacaoMapper;
+import com.searchtecnologia.recurso.service.advertencia.query.criteria.AutoAutorizacaoCriteria;
 import com.searchtecnologia.recurso.service.processo.query.criteria.ProcessoCriteria;
 import com.searchtecnologia.recurso.service.recurso.query.criteria.RecursoViewCriteria;
 import com.searchtecnologia.recurso.service.recurso.query.filter.StatusRecursoFilter;
@@ -24,9 +25,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.searchtecnologia.recurso.service.processo.query.specification.ProcessoSpecification.buildSpecification;
 import static com.searchtecnologia.recurso.service.recurso.query.specification.RecursoViewSpecification.buildSpecification;
+import static com.searchtecnologia.recurso.service.advertencia.query.specification.AutoAutorizacaoSpecification.buildSpecification;
+
 
 @Service
 @Transactional
@@ -35,29 +39,44 @@ public class AdvertenciaServiceImpl implements AdvertenciaService {
 
     private final RecursoViewRepository recursoViewRepository;
     private final ProcessoRepository processoRepository;
+    private final AutoAutorizacaoRepository autorizacaoAdvertenciaRepository;
+    private final AutoAutorizacaoMapper autoAutorizacaoMapper;
 
+    @Override
+    public List<AdvertenciaDTO> listarAdvertencias(String numeroAuto, String codigoOrgao, String codigoInfracao) {
+        AutoAutorizacaoCriteria criteria = AutoAutorizacaoCriteria.builder()
+                .numeroMulta(StringFilter.buildEquals(numeroAuto))
+                .orgaoAutuador(StringFilter.buildEquals(codigoOrgao))
+                .codigoInfracao(StringFilter.buildEquals(codigoInfracao))
+                .build();
+        return this.autorizacaoAdvertenciaRepository.findAll(buildSpecification(criteria))
+                .stream()
+                .map(autoAutorizacaoMapper::toAdvertenciaDTO)
+                .collect(Collectors.toList());
+    }
     @Override
     public String validaConcluirSolicitacao(String numeroProcesso, String orgaoAnalizador, String indeferido) {
         String retorno = "0";
         RecursoViewCriteria criteriaVerificacao1 = RecursoViewCriteria.builder()
                 .numeroProcesso(StringFilter.buildEquals(numeroProcesso))
                 .orgaoAnalisador(StringFilter.buildEquals(orgaoAnalizador))
-                .tipoRecurso(TipoRecursoFilter.buildEquals(TipoRecurso.ADVERTENCIA))
+                .tipoRecurso(TipoRecursoFilter.buildEquals(TipoRecurso.DEFESA_PREVIA))
                 .build();
         Optional<RecursoView> recurso1 = this.recursoViewRepository.findOne(buildSpecification(criteriaVerificacao1));
+        if (recurso1.isEmpty()) {
+            retorno = "1";
+        }
         RecursoViewCriteria criteriaVerificacao2 = RecursoViewCriteria.builder()
                 .numeroProcesso(StringFilter.buildEquals(numeroProcesso))
                 .orgaoAnalisador(StringFilter.buildEquals(orgaoAnalizador))
-                .tipoRecurso(TipoRecursoFilter.buildEquals(TipoRecurso.ADVERTENCIA))
+                .tipoRecurso(TipoRecursoFilter.buildEquals(TipoRecurso.DEFESA_PREVIA))
                 .statusRecurso(StatusRecursoFilter.buildIn(List.of(StatusRecurso.EM_ABERTO, StatusRecurso.EM_ANALISE, StatusRecurso.RESULTADOS_LANCADOS)))
                 .build();
-        if (recurso1.isEmpty()) {
-            retorno = "1";
-            Optional<RecursoView> recurso2 = this.recursoViewRepository.findOne(buildSpecification(criteriaVerificacao2));
-            if (recurso2.isEmpty())  {
-                retorno = "2";
-            }
+        Optional<RecursoView> recurso2 = this.recursoViewRepository.findOne(buildSpecification(criteriaVerificacao2));
+        if (recurso2.isEmpty())  {
+            retorno = "2";
         }
+
         if (retorno == "1") {
             RecursoViewCriteria criteriaVerificacao3 = RecursoViewCriteria.builder()
                     .numeroProcesso(StringFilter.buildEquals(numeroProcesso))
