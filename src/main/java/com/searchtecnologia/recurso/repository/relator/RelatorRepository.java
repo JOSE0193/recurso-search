@@ -15,6 +15,4 @@ public interface RelatorRepository extends JpaRepository<Relator, RelatorPK>, Jp
 
     Long countByIdCodigo(String codigo);
 
-    Optional<Relator> findTopByOrderByIdCodigo();
-
 }

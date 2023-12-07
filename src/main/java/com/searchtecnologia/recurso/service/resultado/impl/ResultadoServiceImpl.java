@@ -92,8 +92,8 @@ public class ResultadoServiceImpl implements ResultadoService {
         resultado.setDescricao(cadastrarResultadoDTO.descricao());
         resultado.setTipoJulgamento(TipoJulgamentoResultado.valueOf(cadastrarResultadoDTO.tipoJulgamento()));
         resultado.setTipoRecurso(TipoRecursoResultado.valueOf(cadastrarResultadoDTO.tipoRecurso()));
-        resultado.setConhecido(SimNao.S);
-        resultado.setExigeEdital(SimNao.N);
+        resultado.setConhecido(DominioSimNao.S);
+        resultado.setExigeEdital(DominioSimNao.N);
         resultado.setNovoPrazo(NovoPrazo.N);
         resultado =  repository.save(resultado);
         return resultado;
@@ -108,8 +108,8 @@ public class ResultadoServiceImpl implements ResultadoService {
         resultado.setDescricao(cadastrarResultadoDTO.descricao());
         resultado.setTipoJulgamento(TipoJulgamentoResultado.valueOf(cadastrarResultadoDTO.tipoJulgamento()));
         resultado.setTipoRecurso(TipoRecursoResultado.valueOf(cadastrarResultadoDTO.tipoRecurso()));
-        resultado.setConhecido(SimNao.S);
-        resultado.setExigeEdital(SimNao.N);
+        resultado.setConhecido(DominioSimNao.S);
+        resultado.setExigeEdital(DominioSimNao.N);
         resultado.setNovoPrazo(NovoPrazo.N);
         return repository.save(resultado);
     }

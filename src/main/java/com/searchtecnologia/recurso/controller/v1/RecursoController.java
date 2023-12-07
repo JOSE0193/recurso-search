@@ -11,11 +11,6 @@ import com.searchtecnologia.recurso.service.relator.RelatorService;
 import com.searchtecnologia.recurso.service.relator.dto.CadastroRelatorDTO;
 import com.searchtecnologia.recurso.service.relator.dto.RelatorDTO;
 import com.searchtecnologia.recurso.service.relator.dto.RelatorSalvoDTO;
-import com.searchtecnologia.recurso.service.resultado.ResultadoService;
-import com.searchtecnologia.recurso.service.resultado.dto.CadastrarResultadoDTO;
-import com.searchtecnologia.recurso.service.resultado.dto.ResultadoDTO;
-import com.searchtecnologia.recurso.service.resultado.dto.ResultadoSalvoDTO;
-import com.searchtecnologia.recurso.service.resultado.dto.TiposResultadoDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -32,53 +27,11 @@ import java.util.List;
 public class RecursoController {
 
     private final RecursoService service;
-    private final ResultadoService resultadoService;
-    private final RelatorService relatorService;
+
     private final OcorrenciaRenainfService ocorrenciaRenainfService;
     private final ProcessoService processoService;
 
     /** END POINTS DE CONSULTA **/
-    @Operation(summary = "Listar", description = "Listar resultados de recursos")
-    @GetMapping("/listar-resultados")
-    public ResponseEntity<List<ResultadoDTO>> listarResultados( @RequestParam(required = false) String codigoResultado,
-                                                                @RequestParam(required = false)String descricaoResultado,
-                                                                @RequestParam(required = false)String tipoRecurso,
-                                                                @RequestParam(required = false)String tipoJulgamento,
-                                                                @RequestParam(required = false)String ativos,
-                                                                @RequestParam(required = false)String orgaoAnalisador) {
-        List<ResultadoDTO> resultados = resultadoService.listarResultados(codigoResultado, descricaoResultado, tipoJulgamento,
-                tipoRecurso, ativos, orgaoAnalisador);
-        if (resultados != null) {
-            return ResponseEntity.ok(resultados);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @Operation(summary = "Listar", description = "Listar tipos de resultados de recursos")
-    @GetMapping("/listar-tipos-resultados")
-    public ResponseEntity<List<TiposResultadoDTO>> listarTiposResultado() {
-        List<TiposResultadoDTO> resultados = resultadoService.listarTiposResultado();
-        if (resultados != null) {
-            return ResponseEntity.ok(resultados);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @Operation(summary = "Listar", description = "Listar relatores")
-    @GetMapping("/listar-relatores")
-    public ResponseEntity<List<RelatorDTO>> listaRelatores(@RequestParam(required = false)String codigoRelator,
-                                                           @RequestParam(required = false)String descricaoRelator,
-                                                           @RequestParam(required = false)String orgaoRelator,
-                                                           @RequestParam(required = false)String codigoJari,
-                                                           @RequestParam(required = false)String tipoJari,
-                                                           @RequestParam(required = false)String ativo) {
-        List<RelatorDTO> relatores = relatorService.listarRelatores(codigoRelator, descricaoRelator, orgaoRelator, codigoJari,
-                tipoJari, ativo);
-        if (relatores != null) {
-            return ResponseEntity.ok(relatores);
-        }
-        return ResponseEntity.notFound().build();
-    }
 
     @Operation(summary = "Consultar ", description = "Buscar dados de um processo")
     @GetMapping("/consultar-processo")
@@ -103,6 +56,7 @@ public class RecursoController {
         return ResponseEntity.ok(processos);
     }
 
+    @Operation(summary = "Verificar ", description = "Verificar requerimentos permitidos")
     @GetMapping("/requerimentos-permitidos")
     public ResponseEntity<List<?>> requerimentosPermitidos(@RequestParam String codigoOrgao){
         List<TipoProcessoDTO> lista = processoService.listaRequerimentoPermitido(codigoOrgao);
@@ -115,6 +69,7 @@ public class RecursoController {
     /** END POINTS DE VALIDAÇÃO **/
 
     @GetMapping("/possui-ocorrencia-valida")
+    @Operation(summary = "Verificar ", description = "Verificar se possui ocorrência válida")
     public ResponseEntity<?> possuiOcorrenciaValida(String orgaoAutuador, String numeroAuto, String numeroSequencial,
                                                     String tipoOcorrencia){
         String ocorrencia = ocorrenciaRenainfService.possuiOcorrenciaValida(orgaoAutuador, numeroAuto, numeroSequencial, tipoOcorrencia);
@@ -131,21 +86,5 @@ public class RecursoController {
         RecursoDTO recursoDTO = this.service.cadastrarRecurso(cadastrarRecursoDTO);
         return ResponseEntity.ok(recursoDTO);
     }
-
-    @Operation(summary = "Cadastrar Resultado", description = "Cadastra um resultado de recurso")
-    @PostMapping("/resultado")
-    public ResponseEntity<ResultadoSalvoDTO> salvarResultado(@RequestBody @Valid CadastrarResultadoDTO cadastrarResultadoDTO) {
-        ResultadoSalvoDTO resultadoSalvoDTO = resultadoService.salvarResultado(cadastrarResultadoDTO);
-        return ResponseEntity.ok(resultadoSalvoDTO);
-    }
-
-    @Operation(summary = "Cadastrar relator", description = "Cadastra ou atualizar relator")
-    @PostMapping("/relator")
-    public ResponseEntity<RelatorSalvoDTO> salvarRelator(@RequestBody @Valid CadastroRelatorDTO cadastroRelatorDTO) {
-        RelatorSalvoDTO salvarRelator = relatorService.salvarRelator(cadastroRelatorDTO);
-        return ResponseEntity.ok(salvarRelator);
-    }
-
-
 
 }

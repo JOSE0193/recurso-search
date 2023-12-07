@@ -17,6 +17,6 @@ public record RelatorSalvoDTO(
         String estacao,
         String funcao,
         String codigoOrgao,
-        String jari
+        String codigoJari
         ) {
 }

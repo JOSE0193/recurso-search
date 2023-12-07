@@ -1,7 +1,7 @@
 package com.searchtecnologia.recurso.model.jari;
 
 import com.searchtecnologia.recurso.model.orgaoautuador.OrgaoAutuador;
-import com.searchtecnologia.recurso.model.resultado.SimNao;
+import com.searchtecnologia.recurso.model.resultado.DominioSimNao;
 import com.searchtecnologia.recurso.util.persistence.type.LocalDateType;
 import com.searchtecnologia.recurso.util.persistence.type.LocalTimeType;
 import jakarta.persistence.*;
@@ -32,8 +32,8 @@ public class Jari {
 
     @NotNull
     @Column(name = "MM_TJAR_ATIVO")
-    @Convert(converter = SimNao.Converter.class)
-    private SimNao ativo;
+    @Convert(converter = DominioSimNao.Converter.class)
+    private DominioSimNao ativo;
 
     @NotNull
     @Column(name = "MM_TJAR_LOG_DATA")

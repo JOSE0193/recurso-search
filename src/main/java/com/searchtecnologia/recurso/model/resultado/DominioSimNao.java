@@ -11,7 +11,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Getter
 @ToString
-public enum SimNao {
+public enum DominioSimNao {
 
     S("S", "Sim"),
     N("N", "Não");
@@ -19,25 +19,25 @@ public enum SimNao {
     private String valor;
     private String descricao;
 
-    public static SimNao get(String valor) {
+    public static DominioSimNao get(String valor) {
         return Arrays.stream(values())
                 .filter(it -> it.valor.equals(valor))
                 .findFirst()
                 .orElse(null);
     }
 
-    public static class Converter implements AttributeConverter<SimNao, String> {
+    public static class Converter implements AttributeConverter<DominioSimNao, String> {
 
         @Override
-        public String convertToDatabaseColumn(SimNao simOuNao) {
+        public String convertToDatabaseColumn(DominioSimNao simOuNao) {
             return Optional.ofNullable(simOuNao)
-                    .map(SimNao::getValor)
+                    .map(DominioSimNao::getValor)
                     .orElse(null);
         }
 
         @Override
-        public SimNao convertToEntityAttribute(String valor) {
-            return SimNao.get(valor);
+        public DominioSimNao convertToEntityAttribute(String valor) {
+            return DominioSimNao.get(valor);
         }
     }
 

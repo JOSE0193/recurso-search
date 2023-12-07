@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Tag(name = "Recurso", description = "Apis para manipular advertências")
+@Tag(name = "Advertencia", description = "Apis para manipular advertências")
 @RequestMapping("/api/v1/advertencias")
 @AllArgsConstructor
 @RestController
@@ -41,7 +41,5 @@ public class AdvertenciaController {
         String retorno = advertenciaService.validaConcluirSolicitacao(numeroProcesso, orgaoAnalizador, soIndeferido);
         return ResponseEntity.ok(retorno);
     }
-
-
 
 }

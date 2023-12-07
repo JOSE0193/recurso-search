@@ -5,9 +5,6 @@ import com.searchtecnologia.recurso.util.persistence.type.LocalDateType;
 import com.searchtecnologia.recurso.util.persistence.type.LocalTimeType;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JoinColumnOrFormula;
-import org.hibernate.annotations.JoinColumnsOrFormulas;
-import org.hibernate.annotations.JoinFormula;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
@@ -28,8 +25,8 @@ public class MotivoResultado {
     private MotivoResultadoPK id;
 
     @Column(name = "MM_MREJ_ATIVO")
-    @Convert(converter = SimNao.Converter.class)
-    private SimNao ativo;
+    @Convert(converter = DominioSimNao.Converter.class)
+    private DominioSimNao ativo;
 
     @Column(name = "MM_MREJ_LOG_DATA")
     @Type(LocalDateType.class)

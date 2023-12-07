@@ -31,7 +31,6 @@ import static com.searchtecnologia.recurso.service.processo.query.specification.
 import static com.searchtecnologia.recurso.service.recurso.query.specification.RecursoViewSpecification.buildSpecification;
 import static com.searchtecnologia.recurso.service.advertencia.query.specification.AutoAutorizacaoSpecification.buildSpecification;
 
-
 @Service
 @Transactional
 @AllArgsConstructor
@@ -73,14 +72,14 @@ public class AdvertenciaServiceImpl implements AdvertenciaService {
                 .statusRecurso(StatusRecursoFilter.buildIn(List.of(StatusRecurso.EM_ABERTO, StatusRecurso.EM_ANALISE, StatusRecurso.RESULTADOS_LANCADOS)))
                 .build();
         Optional<RecursoView> recurso2 = this.recursoViewRepository.findOne(buildSpecification(criteriaVerificacao2));
-        if (recurso2.isEmpty())  {
+        if (retorno != "1" && recurso2.isEmpty())  {
             retorno = "2";
         }
 
         if (retorno == "1") {
             RecursoViewCriteria criteriaVerificacao3 = RecursoViewCriteria.builder()
                     .numeroProcesso(StringFilter.buildEquals(numeroProcesso))
-                    .tipoRecurso(TipoRecursoFilter.buildEquals(TipoRecurso.get("A")))
+                    .tipoRecurso(TipoRecursoFilter.buildEquals(TipoRecurso.ADVERTENCIA))
                     .build();
             Optional<RecursoView> recurso3 = this.recursoViewRepository.findOne(buildSpecification(criteriaVerificacao3));
             if (recurso3 == null) {
@@ -94,14 +93,14 @@ public class AdvertenciaServiceImpl implements AdvertenciaService {
                 }
             }
         }
-        if (retorno == "0" && indeferido.trim().toUpperCase() == "S") {
+        if (retorno == "0" && indeferido.trim() == "S") {
             ProcessoCriteria criteriaVerificacao5 = ProcessoCriteria.builder()
                     .numeroProcesso(StringFilter.buildEquals(numeroProcesso))
-                    .tipoJulgamentoResultado(TipoJulgamentoResultadoFilter.buildEquals(TipoJulgamentoResultado.D))
-                    .tipoRecursoResultado(TipoRecursoResultadoFilter.buildEquals(TipoRecursoResultado.get("A")))
+                    .tipoJulgamentoResultado(TipoJulgamentoResultadoFilter.buildEquals(TipoJulgamentoResultado.DEFERIDO))
+                    .tipoRecursoResultado(TipoRecursoResultadoFilter.buildEquals(TipoRecursoResultado.ADVERTENCIA))
                     .build();
             long processo = processoRepository.count(buildSpecification(criteriaVerificacao5));
-            if (processo == 0) {
+            if (processo != 0) {
                 retorno = "5";
             }
         }

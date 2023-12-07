@@ -1,6 +1,6 @@
 package com.searchtecnologia.recurso.model.orgaoautuador;
 
-import com.searchtecnologia.recurso.model.resultado.SimNao;
+import com.searchtecnologia.recurso.model.resultado.DominioSimNao;
 import com.searchtecnologia.recurso.model.uf.UF;
 import com.searchtecnologia.recurso.util.persistence.type.LocalDateType;
 import com.searchtecnologia.recurso.util.persistence.type.LocalTimeType;
@@ -77,8 +77,8 @@ public class OrgaoAutuador implements Serializable {
     private UF uf;
 
     @Column(name = "MM_OAU_ATIVO")
-    @Convert(converter = SimNao.Converter.class)
-    private SimNao ativo;
+    @Convert(converter = DominioSimNao.Converter.class)
+    private DominioSimNao ativo;
 
     @Column(name = "MM_OAU_DESCRICAO_EXTENSO")
     private String descricaoExetenso;

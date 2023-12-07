@@ -1,7 +1,5 @@
 package com.searchtecnologia.recurso.model.resultado;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.searchtecnologia.recurso.model.orgaoautuador.OrgaoAutuador;
 import com.searchtecnologia.recurso.model.processo.Processo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -37,16 +35,16 @@ public class Resultado implements Serializable {
     private TipoRecursoResultado tipoRecurso;
 
     @Column(name = "MM_REJ_ATIVO")
-    @Convert(converter = SimNao.Converter.class)
-    private SimNao ativo;
+    @Convert(converter = DominioSimNao.Converter.class)
+    private DominioSimNao ativo;
 
     @Column(name = "MM_REJ_EXIGE_EDITAL")
-    @Convert(converter = SimNao.Converter.class)
-    private SimNao exigeEdital;
+    @Convert(converter = DominioSimNao.Converter.class)
+    private DominioSimNao exigeEdital;
 
     @Column(name = "MM_REJ_REC_CONHECIDO_SN")
-    @Convert(converter = SimNao.Converter.class)
-    private SimNao conhecido;
+    @Convert(converter = DominioSimNao.Converter.class)
+    private DominioSimNao conhecido;
 
     @Column(name = "MM_REJ_NOVO_PRAZO")
     @Convert(converter = NovoPrazo.NovoPrazoConverter.class)

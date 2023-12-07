@@ -13,10 +13,10 @@ import java.util.Optional;
 @ToString
 public enum TipoRecursoResultado {
 
-    J("J", "Recurso jari"),
-    A("A", "Solicitação de advertência"),
-    D("D", "Defesa prévia"),
-    S("S", "Segunda Instância");    ;
+    JARI("J", "Recurso jari"),
+    ADVERTENCIA("A", "Solicitação de advertência"),
+    DEFESA_PREVIA("D", "Defesa prévia"),
+    SEGUNDA_INSTANCIA("S", "Segunda Instância");    ;
 
     private String valor;
     private String descricao;

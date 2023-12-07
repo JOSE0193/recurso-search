@@ -1,8 +1,7 @@
 package com.searchtecnologia.recurso.service.relator.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.searchtecnologia.recurso.model.jari.TipoJari;
-import com.searchtecnologia.recurso.model.resultado.SimNao;
+import com.searchtecnologia.recurso.model.resultado.DominioSimNao;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record CadastroRelatorDTO(
@@ -11,7 +10,7 @@ public record CadastroRelatorDTO(
         String codigo,
         String nome,
         String matricula,
-        SimNao ativo,
+        String ativo,
         String operador,
         String estacao,
         String funcao,

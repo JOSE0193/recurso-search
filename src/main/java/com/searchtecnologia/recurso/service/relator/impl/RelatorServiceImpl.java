@@ -3,7 +3,6 @@ package com.searchtecnologia.recurso.service.relator.impl;
 import com.searchtecnologia.recurso.exception.NotFoundException;
 import com.searchtecnologia.recurso.model.jari.Jari;
 import com.searchtecnologia.recurso.model.jari.JariPK;
-import com.searchtecnologia.recurso.model.jari.TipoJari;
 import com.searchtecnologia.recurso.model.orgaoautuador.OrgaoAutuador;
 import com.searchtecnologia.recurso.model.relator.Relator;
 import com.searchtecnologia.recurso.model.relator.RelatorPK;
@@ -15,8 +14,6 @@ import com.searchtecnologia.recurso.service.relator.dto.RelatorDTO;
 import com.searchtecnologia.recurso.service.relator.dto.RelatorSalvoDTO;
 import com.searchtecnologia.recurso.service.relator.mapper.RelatorMapper;
 import com.searchtecnologia.recurso.service.relator.query.criteria.RelatorCriteria;
-import com.searchtecnologia.recurso.service.relator.query.filter.TipoJariFilter;
-import com.searchtecnologia.recurso.service.resultado.query.filter.AtivoFilter;
 import com.searchtecnologia.recurso.service.util.query.filter.StringFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -75,17 +73,30 @@ public class RelatorServiceImpl implements RelatorService {
      * PROCEDURE: PKG_SGM_RECURSO_RESULTADO.FNC_GERAR_CODIGO_RELATOR
      */
     public String gerarCodigoRelator() {
-            Optional<Relator> codigoRelator = repository.findTopByOrderByIdCodigo();
-        if (codigoRelator.isPresent()) {
-            Relator relator = codigoRelator.get();
-            int proximoCodigo = Integer.parseInt(relator.getId().getCodigo()) + 1;
-            return String.format("%03d", proximoCodigo);
-        } else {
-            return "001"; // Se nenhum código estiver em uso, retorne "001"
+        List<Relator> lista = repository.findAll();
+        lista.sort(Comparator.comparing(relator -> relator.getId().getCodigo()));
+
+        String codNovo = null;
+        int qtd = 0;
+
+        for (int i = 0; i < lista.size(); i++) {
+            int codigoAtual = Integer.parseInt(lista.get(i).getId().getCodigo());
+            int proximoCodigo = (i < lista.size() - 1) ? Integer.parseInt(lista.get(i + 1).getId().getCodigo()) : codigoAtual + 1;
+            int diferenca = proximoCodigo - codigoAtual;
+
+            if (diferenca > 1) {
+                codNovo = String.format("%03d", codigoAtual + 1);
+                break;
+            }
+            qtd++;
         }
+
+        if (qtd == 0) {
+            codNovo = "001";
+        }
+
+        return codNovo;
     }
-
-
 
     /**
      * PROCEDURE: PKG_SGM_RECURSO_RESULTADO.PRC_SALVAR_RELATOR
@@ -103,25 +114,18 @@ public class RelatorServiceImpl implements RelatorService {
         Relator relator = new Relator();
         RelatorPK relatorPK = new RelatorPK();
         relatorPK.setCodigo(cadastroRelatorDTO.codigo());
+        relatorPK.setCodigoOrgaoAutuador(cadastroRelatorDTO.codigoOrgao());
         relator.setId(relatorPK);
         relator.setNome(cadastroRelatorDTO.nome());
         relator.setMaricula(cadastroRelatorDTO.matricula());
-        relator.setAtivo(SimNao.valueOf(cadastroRelatorDTO.ativo().getValor()));
+        relator.setAtivo(DominioSimNao.valueOf(cadastroRelatorDTO.ativo()));
         relator.setDataCadastro(LocalDate.now());
         relator.setHoraCadastro(LocalTime.now());
-        relator.setOperadorCadastro(cadastroRelatorDTO.operador());
-        relator.setEstacaoCadastro(cadastroRelatorDTO.estacao());
-        relator.setFuncaoCadastro(cadastroRelatorDTO.funcao());
+        relator.setCodigoJari(cadastroRelatorDTO.codigoJari());
+        relator.setOperador(cadastroRelatorDTO.operador());
+        relator.setEstacao(cadastroRelatorDTO.estacao());
+        relator.setFuncao(cadastroRelatorDTO.funcao());
 
-        OrgaoAutuador orgaoAutuador = new OrgaoAutuador();
-        orgaoAutuador.setCodigo(cadastroRelatorDTO.codigoOrgao());
-        relator.setOrgaoAutuador(orgaoAutuador);
-
-        Jari jari = new Jari();
-        JariPK jariPK = new JariPK();
-        jariPK.setCodigo(cadastroRelatorDTO.codigoJari());
-        jari.setId(jariPK);
-        relator.setJari(jari);
         relator =  repository.save(relator);
 
         return relator;
@@ -132,25 +136,13 @@ public class RelatorServiceImpl implements RelatorService {
                 .orElseThrow(() -> new NotFoundException("O código do relator não existe"));
         RelatorPK relatorPK = new RelatorPK();
         relatorPK.setCodigo(cadastroRelatorDTO.codigo());
+        relatorPK.setCodigoOrgaoAutuador(cadastroRelatorDTO.codigoOrgao());
         relator.setId(relatorPK);
         relator.setNome(cadastroRelatorDTO.nome());
         relator.setMaricula(cadastroRelatorDTO.matricula());
-        relator.setAtivo(SimNao.valueOf(cadastroRelatorDTO.ativo().getValor()));
-        relator.setDataCadastro(LocalDate.now());
-        relator.setHoraCadastro(LocalTime.now());
-        relator.setOperadorCadastro(cadastroRelatorDTO.operador());
-        relator.setEstacaoCadastro(cadastroRelatorDTO.estacao());
-        relator.setFuncaoCadastro(cadastroRelatorDTO.funcao());
+        relator.setAtivo(DominioSimNao.valueOf(cadastroRelatorDTO.ativo()));
+        relator.setCodigoJari(cadastroRelatorDTO.codigoJari());
 
-        OrgaoAutuador orgaoAutuador = new OrgaoAutuador();
-        orgaoAutuador.setCodigo(cadastroRelatorDTO.codigoOrgao());
-        relator.setOrgaoAutuador(orgaoAutuador);
-
-        Jari jari = new Jari();
-        JariPK jariPK = new JariPK();
-        jariPK.setCodigo(cadastroRelatorDTO.codigoJari());
-        jari.setId(jariPK);
-        relator.setJari(jari);
         return repository.save(relator);
     }
 

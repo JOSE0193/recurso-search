@@ -12,4 +12,6 @@ public interface MultaService {
     Optional<Multa> obterPorCodigoOrgaoAutuador(String codigoOrgaoAutuador, String numero, String sequencial);
 
     LogMulta salvarLog(LogMulta logMulta);
+
+
 }

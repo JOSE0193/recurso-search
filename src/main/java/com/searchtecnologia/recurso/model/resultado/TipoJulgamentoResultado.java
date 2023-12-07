@@ -13,8 +13,8 @@ import java.util.Optional;
 @ToString
 public enum TipoJulgamentoResultado {
 
-    D("D", "Deferido"),
-    I("I", "Indeferido");
+    DEFERIDO("D", "Deferido"),
+    INDEFERIDO("I", "Indeferido");
 
     private String valor;
     private String descricao;
