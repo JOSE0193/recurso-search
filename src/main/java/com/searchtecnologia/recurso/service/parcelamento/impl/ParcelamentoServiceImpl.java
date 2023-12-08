@@ -1,11 +1,6 @@
 package com.searchtecnologia.recurso.service.parcelamento.impl;
 
-import com.searchtecnologia.recurso.repository.cancelamento.CancelamentoRepository;
 import com.searchtecnologia.recurso.repository.parcelamento.AutoInfracaoParcelamentoRepository;
-import com.searchtecnologia.recurso.service.cancelamento.CancelamentoService;
-import com.searchtecnologia.recurso.service.cancelamento.dto.CancelamentoDTO;
-import com.searchtecnologia.recurso.service.cancelamento.mapper.CancelamentoMapper;
-import com.searchtecnologia.recurso.service.cancelamento.query.criteria.CancelamentoCriteria;
 import com.searchtecnologia.recurso.service.parcelamento.ParcelamentoService;
 import com.searchtecnologia.recurso.service.parcelamento.query.criteria.AutoInfracaoParcelamentoCriteria;
 import com.searchtecnologia.recurso.service.util.query.filter.StringFilter;
@@ -13,11 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static com.searchtecnologia.recurso.service.parcelamento.query.specification.AutoInfracaoParcelamentoSpecification.buildSpecification;
-
 
 @Service
 @Transactional

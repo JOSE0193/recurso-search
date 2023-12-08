@@ -2,7 +2,9 @@ package com.searchtecnologia.recurso.controller.v1;
 
 import com.searchtecnologia.recurso.service.cancelamento.CancelamentoService;
 import com.searchtecnologia.recurso.service.cancelamento.dto.CancelamentoDTO;
+import com.searchtecnologia.recurso.service.infrator.InfratorService;
 import com.searchtecnologia.recurso.service.multa.MultaService;
+import com.searchtecnologia.recurso.service.pagamento.RegistroPagamentoService;
 import com.searchtecnologia.recurso.service.parcelamento.ParcelamentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +26,8 @@ public class MultaController {
     private MultaService service;
     private CancelamentoService cancelamentoService;
     private ParcelamentoService parcelamentoService;
+    private InfratorService infratorService;
+    private RegistroPagamentoService registroPagamentoService;
 
     /** END POINTS DE CONSULTA **/
     @Operation(summary = "Listar", description = "lista cancelamentos ocorridos")
@@ -56,9 +60,33 @@ public class MultaController {
     public ResponseEntity<?> possuiParcelamento(@RequestParam(required = false) String numeroAuto,
                                                 @RequestParam(required = false) String sequencial,
                                                 @RequestParam(required = false) String orgaoAutuador) {
-        String cancelamento = parcelamentoService.possuiParcelamento(numeroAuto, sequencial, orgaoAutuador);
-        if (cancelamento != null) {
-            return ResponseEntity.ok(cancelamento);
+        String resultado = parcelamentoService.possuiParcelamento(numeroAuto, sequencial, orgaoAutuador);
+        if (resultado != null) {
+            return ResponseEntity.ok(resultado);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @Operation(summary = "Verificar", description = "Verifica se histórico do infrator")
+    @GetMapping("/possui-hist-infrator")
+    public ResponseEntity<?> possuiHistInfrator(@RequestParam(required = false) String numeroAuto,
+                                                @RequestParam(required = false) String sequencial,
+                                                @RequestParam(required = false) String orgaoAutuador) {
+        String resultado = infratorService.possuiHistoricoInfrator(numeroAuto, sequencial, orgaoAutuador);
+        if (resultado != null) {
+            return ResponseEntity.ok(resultado);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @Operation(summary = "Verificar", description = "Verifica se histórico do infrator")
+    @GetMapping("/possui-hist-pagamento")
+    public ResponseEntity<?> possuiHistPagamento(@RequestParam(required = false) String numeroAuto,
+                                                @RequestParam(required = false) String codigoInfracao,
+                                                @RequestParam(required = false) String orgaoAutuador) {
+        String resultado = registroPagamentoService.possuiHistoricoPagamento(numeroAuto, codigoInfracao, orgaoAutuador);
+        if (resultado != null) {
+            return ResponseEntity.ok(resultado);
         }
         return ResponseEntity.notFound().build();
     }
